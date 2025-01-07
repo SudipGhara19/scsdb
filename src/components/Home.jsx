@@ -8,7 +8,7 @@ function Home() {
 
         <>
             <SideNav />
-            <div className='w-[80%] h-full bg-red-500'></div>
+            <div className='w-[80%] h-full '></div>
         </>
     )
 }
