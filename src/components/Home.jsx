@@ -1,5 +1,6 @@
 import React from 'react'
-import SideNav from './partials/SideNav';
+import SideNav from './partials/SideNav.jsx';
+import TopNav from './partials/TopNav.jsx';
 
 function Home() {
     document.title = "SCSDB | Homepage";
@@ -8,7 +9,9 @@ function Home() {
 
         <>
             <SideNav />
-            <div className='w-[80%] h-full '></div>
+            <div className='w-[80%] h-full '>
+                <TopNav />
+            </div>
         </>
     )
 }
