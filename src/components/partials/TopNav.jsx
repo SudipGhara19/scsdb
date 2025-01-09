@@ -1,13 +1,31 @@
-import React, { useState } from 'react'
+import axios from '../../utils/axios';
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function TopNav() {
 
     const [query, setQuery] = useState("");
+    const [searches, setSearches] = useState([]);
 
     const deleteQuery = () => {
         setQuery("");
     }
+
+    const getSearches = async () => {
+        try {
+
+            const { data } = await axios.get(`/search/multi?query=${query}`);
+            console.log(data.results);
+            setSearches(data.results);
+
+        } catch (error) {
+            console.log("Error: " + error);
+        }
+    };
+
+    useEffect(() => {
+        getSearches();
+    }, [query])
 
     return (
         <div className='w-full h-[10vh] relative flex justify-start items-center ml-[15%]'>
@@ -23,10 +41,24 @@ function TopNav() {
             {query !== "" && <i onClick={deleteQuery} class="text-zinc-400 text-3xl ri-close-fill"></i>}
 
             <div className='absolute w-[45%] max-h-[50vh] bg-zinc-200 top-[90%] overflow-auto '>
-                {/* <Link className=' hover:text-zinc-900 hover:bg-zinc-300 duration-300 font-semibold text-zinc-600 w-[100%] p-10 flex justify-start items-center border-b-2 border-zinc-100 '>
-                    <img src="" alt="" />
-                    <span>Hello Everyone</span>
-                </Link> */}
+                {searches.map((s, i) =>
+                    <Link key={i} className=' hover:text-zinc-900 hover:bg-zinc-300 duration-300 font-semibold text-zinc-600 w-[100%] p-10 flex justify-start items-center border-b-2 border-zinc-100 '>
+                        <img
+                            className='h-[10vh] w-[10vh] rounded mr-5 shadow-lg shadow-zinc-500 '
+                            src={s.backdrop_path || s.profile_path ?
+                                `https://image.tmdb.org/t/p/original/${s.backdrop_path || s.profile_path}` :
+                                "/no-image.webp"}
+                            alt="search-image"
+                        />
+                        <span>
+                            {s.name ||
+                                s.title ||
+                                s.original_name ||
+                                s.original_title}
+                        </span>
+                    </Link>
+                )}
+
             </div>
 
         </div>
